@@ -18,10 +18,12 @@ var User = new Schema({
     },
     role: {
         type: String,
-        enum: ['reader', 'creator', 'editor'],
-        default: 'reader'
-    }
-});
+        enum: ['donor', 'ngo', 'admin'],
+        default: 'donor'
+    },
+},
+{timestamps: true}
+);
 
 User.plugin(passportLocalMongoose);
 module.exports = mongoose.model('User',User);

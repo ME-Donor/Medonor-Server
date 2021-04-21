@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -10,11 +11,14 @@ var authenticate = require('./authenticate');
 var config = require('./config');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var users = require('./routes/users');
+var ngoblogs = require('./routes/ngoblogs');
 
 const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 
 const Users = require('./models/user');
+
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url,{
@@ -42,9 +46,12 @@ app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', users);
+
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/ngoblogs',ngoblogs);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
