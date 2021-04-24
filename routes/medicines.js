@@ -1,44 +1,43 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const NgoBlogs = require('../models/ngoblog');
+const Medicines = require('../models/medicines');
 const authenticate = require('../authenticate');
-const multer = require('multer');
 const mongoose=require('mongoose');
-const ngoblogsRouter = express.Router();
+const medicinesRouter = express.Router();
 
-ngoblogsRouter.use(bodyParser.json());
+medicinesRouter.use(bodyParser.json());
 
-ngoblogsRouter.route('/')
-
+medicinesRouter.route('/')
+.options((req,res)=>{res.sendStatus(200);})
 .get((req, res, next) => {
 
-    NgoBlogs.find({})
+    Medicines.find({})
     .populate('author')
-    .then((ngoblog) => {
+    .then((medicine) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(ngoblog);
+        res.json(medicine);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
 .post(authenticate.verifyUser,(req,res,next) => {
-    
     if (req.body != null) {
+        console.log(req.body.author)
         //req.body.author = req.user._id;
-        NgoBlogs.create(req.body)
-        .then((ngoblog) => {
-            NgoBlogs.findById(ngoblog._id)
+        Medicines.create(req.body)
+        .then((medicine) => {
+            Medicines.findById(medicine._id)
             .populate('author')
-            .then((ngoblog) => {
+            .then((medicine) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(ngoblog);
+                res.json(medicine);
             })
         }, (err) => next(err))
         .catch((err) => next(err));
     }
     else {
-        err = new Error('Blog not found in request body');
+        err = new Error('Medicine not found in request body');
         err.status = 404;
         return next(err);
     }
@@ -47,51 +46,51 @@ ngoblogsRouter.route('/')
 .put(authenticate.verifyUser,authenticate.roleAuthorization(['ngo']),(req,res,next) => {
     
     res.statusCode = 403;
-    res.end('PUT operation not supported on /ngoblogs');
+    res.end('PUT operation not supported on /medicines');
 })
 .delete(authenticate.verifyUser,authenticate.roleAuthorization(['admin']), (req,res,next) => {
     
     res.statusCode = 403;
-    res.end('DELETE operation not supported on /ngoblogs');
+    res.end('DELETE operation not supported on /medicines');
 });
 
-ngoblogsRouter.route('/:ngoblogId')
+medicinesRouter.route('/:medicineId')
 .options((req,res)=>{res.sendStatus(200);})
 .get((req,res,next) => {
-    NgoBlogs.findById(req.params.ngoblogId)
+    Medicines.findById(req.params.medicineId)
     .populate('author')
-    .then((ngoblog) => {
+    .then((medicine) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(ngoblog);
+        res.json(medicine);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
 .put(authenticate.verifyUser,authenticate.roleAuthorization(['admin','ngo']), (req, res, next) => {
-    NgoBlogs.findById(req.params.ngoblogId)
-    .then((ngoblog) => {
-        if (ngoblog != null) {
-            if (!ngoblog.author.equals(req.user._id)) {
-                var err = new Error('You are not authorized to update this blog!');
+    Medicines.findById(req.params.medicineId)
+    .then((medicine) => {
+        if (medicine != null) {
+            if (!medicine.author.equals(req.user._id)) {
+                var err = new Error('You are not authorized to update this medicine!');
                 err.status = 403;
                 return next(err);
             }
             req.body.author = req.user._id;
-            NgoBlogs.findByIdAndUpdate(req.params.ngoblogId, {
+            Medicines.findByIdAndUpdate(req.params.medicineId, {
                 $set: req.body
             }, { new: true })
-            .then((ngoblog) => {
-                NgoBlogs.findById(ngoblog._id)
+            .then((medicine) => {
+                Medicines.findById(medicine._id)
                 .populate('author')
-                .then((ngoblog) => {
+                .then((medicine) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
-                    res.json(ngoblog); 
+                    res.json(medicine); 
                 })               
             }, (err) => next(err));
         }
         else {
-            err = new Error('Blog ' + req.params.blogId + ' not found');
+            err = new Error('Medicine ' + req.params.medicineId + ' not found');
             err.status = 404;
             return next(err);            
         }
@@ -100,10 +99,10 @@ ngoblogsRouter.route('/:ngoblogId')
 })
 .delete(authenticate.verifyUser,authenticate.roleAuthorization(['ngo','admin']),(req, res, next) => {
 
-    NgoBlogs.findById(req.params.ngoblogId)
-    .then((ngoblog) => {
-        if (ngoblog != null) {
-            NgoBlogs.findByIdAndRemove(req.params.ngoblogId)
+    Medicines.findById(req.params.medicineId)
+    .then((medicine) => {
+        if (medicine != null) {
+            Medicines.findByIdAndRemove(req.params.medicineId)
             .then((resp) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -112,7 +111,7 @@ ngoblogsRouter.route('/:ngoblogId')
             .catch((err) => next(err));
         }
         else {
-            err = new Error('Blog with id ' + req.params.ngoblogId + ' not found');
+            err = new Error('Blog with id ' + req.params.medicineId + ' not found');
             err.status = 404;
             return next(err);            
         }
@@ -120,5 +119,5 @@ ngoblogsRouter.route('/:ngoblogId')
     .catch((err) => next(err));
 });
 
-module.exports = ngoblogsRouter;
+module.exports = medicinesRouter;
 

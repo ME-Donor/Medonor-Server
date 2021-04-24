@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('./user');
 const Schema = mongoose.Schema;
 
 const ngoblogSchema = Schema({
@@ -12,12 +13,8 @@ const ngoblogSchema = Schema({
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    },
-    dateNum: {
-        type: Number,
-        required: true,
-    },
+        ref: "User"
+    }
 
 }, { timestamps: true })
 

@@ -13,6 +13,10 @@ var config = require('./config');
 var indexRouter = require('./routes/index');
 var users = require('./routes/users');
 var ngoblogs = require('./routes/ngoblogs');
+var ngobeneficiary = require('./routes/ngobeneficiary');
+var donorspeaks = require('./routes/donorspeaks');
+var medicines = require('./routes/medicines');
+var uploadRouter = require('./routes/uploadRouter')
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
@@ -41,7 +45,7 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+//app.use(cookieParser());
 
 
 app.use(passport.initialize());
@@ -49,9 +53,14 @@ app.use('/', indexRouter);
 app.use('/users', users);
 
 
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/ngoblogs',ngoblogs);
+app.use('/ngobeneficiary',ngobeneficiary)
+app.use('/donorspeaks',donorspeaks);
+app.use('/medicines',medicines);
+app.use('/imageUpload',uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

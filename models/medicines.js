@@ -17,9 +17,9 @@ const medicineSchema = Schema({
         required: true,
     },
 
-    user: {
-        type: String,
-        default : ''
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'User'
     },
 
     image:{

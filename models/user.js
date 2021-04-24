@@ -4,11 +4,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 
 
 var User = new Schema({
-    firstname:{
-        type: String,
-        default : ''
-    },
-    lastname:{
+    name:{
         type:String,
         default : ''
     },
@@ -21,9 +17,19 @@ var User = new Schema({
         enum: ['donor', 'ngo', 'admin'],
         default: 'donor'
     },
+    blogs: [
+        {
+            blog: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "ngoblog",
+            },
+        },
+    ],
 },
 {timestamps: true}
 );
+
+
 
 User.plugin(passportLocalMongoose);
 module.exports = mongoose.model('User',User);
