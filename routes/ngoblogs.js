@@ -24,7 +24,7 @@ ngoblogsRouter
       )
       .catch((err) => next(err));
   })
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyUser,authenticate.roleAuthorization(['ngo']), (req, res, next) => {
     if (req.body !== null) {
       //req.body.author = req.user._id;
       const ngoObj = {

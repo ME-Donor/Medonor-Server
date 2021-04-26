@@ -20,11 +20,17 @@ ngobeneficiaryRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post(authenticate.verifyUser,(req,res,next) => {
+.post(authenticate.verifyUser,authenticate.roleAuthorization(['ngo']),(req,res,next) => {
     
     if (req.body != null) {
+
         //req.body.author = req.user._id;
-        NgoBeneficiary.create(req.body)
+        const ngobeneficiaryObj = {
+            heading: req.body.heading,
+            description: req.body.description,
+            author: req.user._id,
+          };
+        NgoBeneficiary.create(ngobeneficiaryObj)
         .then((ngobeneficiary) => {
             NgoBeneficiary.findById(ngobeneficiary._id)
             .populate('author')
@@ -66,7 +72,7 @@ ngobeneficiaryRouter.route('/:ngobeneficiaryId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.put(authenticate.verifyUser,authenticate.roleAuthorization(['admin','ngo']), (req, res, next) => {
+.put(authenticate.verifyUser,authenticate.roleAuthorization(['ngo']), (req, res, next) => {
     NgoBeneficiary.findById(req.params.ngobeneficiaryId)
     .then((ngobeneficiary) => {
         if (ngobeneficiary != null) {

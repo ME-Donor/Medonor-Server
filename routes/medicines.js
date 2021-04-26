@@ -20,11 +20,16 @@ medicinesRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post(authenticate.verifyUser,(req,res,next) => {
+.post(authenticate.verifyUser,authenticate.roleAuthorization(['donor']),(req,res,next) => {
     if (req.body != null) {
-        console.log(req.body.author)
+        const medicineObj = {
+            name: req.body.name,
+            expirydate: req.body.expirydate,
+            author: req.user._id,
+            amount:req.body.amount
+          };
         //req.body.author = req.user._id;
-        Medicines.create(req.body)
+        Medicines.create(medicineObj)
         .then((medicine) => {
             Medicines.findById(medicine._id)
             .populate('author')
@@ -43,7 +48,7 @@ medicinesRouter.route('/')
     }
 
 })
-.put(authenticate.verifyUser,authenticate.roleAuthorization(['ngo']),(req,res,next) => {
+.put(authenticate.verifyUser,authenticate.roleAuthorization(['donor']),(req,res,next) => {
     
     res.statusCode = 403;
     res.end('PUT operation not supported on /medicines');
@@ -66,7 +71,7 @@ medicinesRouter.route('/:medicineId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.put(authenticate.verifyUser,authenticate.roleAuthorization(['admin','ngo']), (req, res, next) => {
+.put(authenticate.verifyUser,authenticate.roleAuthorization(['admin','donor']), (req, res, next) => {
     Medicines.findById(req.params.medicineId)
     .then((medicine) => {
         if (medicine != null) {
@@ -97,7 +102,7 @@ medicinesRouter.route('/:medicineId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.delete(authenticate.verifyUser,authenticate.roleAuthorization(['ngo','admin']),(req, res, next) => {
+.delete(authenticate.verifyUser,authenticate.roleAuthorization(['donor','admin']),(req, res, next) => {
 
     Medicines.findById(req.params.medicineId)
     .then((medicine) => {

@@ -20,10 +20,6 @@ const medicineSchema = Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'User'
-    },
-
-    image:{
-        type: Buffer
     }
 
 }, { timestamps: true })
