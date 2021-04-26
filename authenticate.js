@@ -47,13 +47,11 @@ exports.roleAuthorization = function (roles) {
         return next(err);
       }
 
-      if (roles.indexOf(foundUser.role) > -1) {
+      if (roles.indexOf(foundUser.role) < 0) {
         return res.status(401).send('Authorization error!');
       }
 
-      res
-        .status(401)
-        .json({ error: 'You are not authorized to view this content' });
+      next();
       //   return next('Unauthorized');
     });
   };
