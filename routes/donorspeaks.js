@@ -20,11 +20,16 @@ donorspeaksRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post(authenticate.verifyUser,(req,res,next) => {
+.post(authenticate.verifyUser,authenticate.roleAuthorization(['donor']),(req,res,next) => {
     
     if (req.body != null) {
+        const donorspeaksObj = {
+            heading: req.body.heading,
+            description: req.body.description,
+            author: req.user._id,
+          };
         //req.body.author = req.user._id;
-        DonorSpeaks.create(req.body)
+        DonorSpeaks.create(donorspeaksObj)
         .then((donorspeaks) => {
             DonorSpeaks.findById(donorspeaks._id)
             .populate('author')
