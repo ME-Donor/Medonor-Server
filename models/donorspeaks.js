@@ -14,10 +14,6 @@ const donorspeaksSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-    dateNum: {
-        type: Number,
-        required: true,
-    },
 
 }, { timestamps: true })
 
