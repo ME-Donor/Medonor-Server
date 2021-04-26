@@ -9,6 +9,7 @@ var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var authenticate = require('./authenticate');
 var config = require('./config');
+const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var users = require('./routes/users');
@@ -39,6 +40,9 @@ connect.then(
 );
 
 var app = express();
+
+// cors
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
