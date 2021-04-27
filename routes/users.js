@@ -31,8 +31,8 @@ router.post('/signup', (req, res, next) => {
         res.setHeader('Content-Type', 'application/json');
         res.json({ err: err });
       } else {
-        if (req.body.firstname) user.firstname = req.body.firstname;
-        if (req.body.lastname) user.lastname = req.body.lastname;
+        if (req.body.name) user.name = req.body.name;
+        if (req.body.description) user.description = req.body.description;
         user.save((err, user) => {
           passport.authenticate('local')(req, res, () => {
             if (err) {
@@ -58,6 +58,7 @@ router.post('/login', passport.authenticate('local'), (req, res, next) => {
   res.json({
     success: true,
     token: token,
+    user: req.user,
     status: 'You are successfully logged in!',
   });
 });
