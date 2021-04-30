@@ -8,12 +8,12 @@ const medicineSchema = Schema({
     },
 
     expirydate: {
-        type: Number,
+        type: String,
         required: true,
     },
 
     amount: {
-        type: Number,
+        type: String,
         required: true,
     },
 

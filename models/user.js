@@ -17,14 +17,14 @@ var User = new Schema({
         enum: ['donor', 'ngo', 'admin'],
         default: 'donor'
     },
-    blogs: [
-        {
-            blog: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "ngoblog",
-            },
-        },
-    ],
+    address: {
+        type: String,
+        default: ''
+    },
+    contact:{
+        type: Number,
+        default: ''
+    }
 },
 {timestamps: true}
 );
