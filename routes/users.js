@@ -33,9 +33,9 @@ router.post('/signup', (req, res, next) => {
       } else {
         if (req.body.name) user.name = req.body.name;
         if (req.body.description) user.description = req.body.description;
-        if(req.body.role) user.role=req.body.role;
+        if (req.body.role) user.role = req.body.role;
         if (req.body.address) user.address = req.body.address;
-        if(req.body.contact) user.contact = req.body.contact;
+        if (req.body.contact) user.contact = req.body.contact;
         user.save((err, user) => {
           passport.authenticate('local')(req, res, () => {
             if (err) {
@@ -66,7 +66,7 @@ router.post('/login', passport.authenticate('local'), (req, res, next) => {
   });
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
   if (req.session) {
     req.session.destroy();
     res.clearCookie('session-id');
