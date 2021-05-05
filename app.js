@@ -19,6 +19,7 @@ var donorspeaks = require('./routes/donorspeaks');
 var medicines = require('./routes/medicines');
 var uploadRouter = require('./routes/uploadRouter');
 
+
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
@@ -64,6 +65,7 @@ app.use('/ngobeneficiary', ngobeneficiary);
 app.use('/donorspeaks', donorspeaks);
 app.use('/medicines', medicines);
 app.use('/imageUpload', uploadRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

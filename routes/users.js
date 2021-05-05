@@ -7,7 +7,7 @@ var authenticate = require('../authenticate');
 router.use(bodyParser.json());
 
 /* GET users listing. */
-router.get('/', authenticate.verifyUser, (req, res, next) => {
+router.get('/', authenticate.verifyUser,authenticate.roleAuthorization(['admin']), (req, res, next) => {
   User.find({})
     .then((users) => {
       res.statusCode = 200;
@@ -20,6 +20,10 @@ router.get('/', authenticate.verifyUser, (req, res, next) => {
       res.json({ err: err });
     });
 });
+
+/* Get Ngo listing. */
+
+
 
 router.post('/signup', (req, res, next) => {
   User.register(
@@ -66,16 +70,9 @@ router.post('/login', passport.authenticate('local'), (req, res, next) => {
   });
 });
 
-router.get('/logout', (req, res) => {
-  if (req.session) {
-    req.session.destroy();
-    res.clearCookie('session-id');
-    res.redirect('/');
-  } else {
-    var err = new Error('You are not logged in!');
-    err.status = 403;
-    next(err);
-  }
+router.get('/logout', (req, res, next) => {
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;

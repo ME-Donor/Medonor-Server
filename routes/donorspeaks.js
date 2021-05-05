@@ -25,13 +25,12 @@ donorspeaksRouter
       )
       .catch((err) => next(err));
   })
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyUser,authenticate.roleAuthorization(['donor']), (req, res, next) => {
     if (req.body != null) {
       //req.body.author = req.user._id;
       const donorSpeaksObj = {
         heading: req.body.heading,
         description: req.body.description,
-        dateNum: req.body.dateNum,
         author: req.user._id,
       };
 

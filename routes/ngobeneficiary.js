@@ -28,6 +28,7 @@ ngobeneficiaryRouter.route('/')
         const ngobeneficiaryObj = {
             heading: req.body.heading,
             description: req.body.description,
+            name:req.body.name,
             author: req.user._id,
           };
         NgoBeneficiary.create(ngobeneficiaryObj)

@@ -10,6 +10,11 @@ const ngobeneficiarySchema = Schema({
         type:String,
         required:true
     },
+    name: {
+        type:String,
+        required:true,
+        default:''
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
