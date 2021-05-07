@@ -21,7 +21,6 @@ router.get('/', authenticate.verifyUser,authenticate.roleAuthorization(['admin']
     });
 });
 
-/* Get Ngo listing. */
 
 
 
